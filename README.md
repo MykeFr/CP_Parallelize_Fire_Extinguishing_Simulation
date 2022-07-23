@@ -1,5 +1,3 @@
-# Concurrency and Parallelism 2021-22
-
 ### Agent-based Simulation of Fire Extinguishing
 
 EduHPC 2019: Peachy assignment
