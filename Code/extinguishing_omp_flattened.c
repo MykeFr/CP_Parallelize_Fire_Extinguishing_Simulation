@@ -76,11 +76,6 @@ void show_usage( char *program_name ) {
  * Function: Print the current state of the simulation 
  */
 void print_status( int iteration, int rows, int columns, float *surface, int num_teams, Team *teams, int num_focal, FocalPoint *focal, float global_residual ) {
-	/* 
-	 * You don't need to optimize this function, it is only for pretty printing and debugging purposes.
-	 * It is not compiled in the production versions of the program.
-	 * Thus, it is never used when measuring times in the leaderboard
-	 */
 	int i,j;
 
 	printf("Iteration: %d\n", iteration );
@@ -294,12 +289,6 @@ int main(int argc, char *argv[]) {
 	/* 2. Start global timer */
 	double ttotal = cp_Wtime();
 
-/*
- *
- * START HERE: DO NOT CHANGE THE CODE ABOVE THIS POINT
- *
- */
-
 	/* 3. Initialize surfaces */
 	surface = (float *)malloc( sizeof(float) * (size_t)rows * (size_t)columns );
 	surfaceCopy = (float *)malloc( sizeof(float) * (size_t)rows * (size_t)columns );
@@ -419,12 +408,6 @@ int main(int argc, char *argv[]) {
 #endif // DEBUG
 	}
 	
-/*
- *
- * STOP HERE: DO NOT CHANGE THE CODE BELOW THIS POINT
- *
- */
-
 	/* 5. Stop global time */
 	ttotal = cp_Wtime() - ttotal;
 

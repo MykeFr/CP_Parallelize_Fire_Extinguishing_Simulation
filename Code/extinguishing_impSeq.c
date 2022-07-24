@@ -77,11 +77,6 @@ void show_usage( char *program_name ) {
  * Function: Print the current state of the simulation 
  */
 void print_status( int iteration, int rows, int columns, float *surface, int num_teams, Team *teams, int num_focal, FocalPoint *focal, float global_residual ) {
-	/* 
-	 * You don't need to optimize this function, it is only for pretty printing and debugging purposes.
-	 * It is not compiled in the production versions of the program.
-	 * Thus, it is never used when measuring times in the leaderboard
-	 */
 	int i,j;
 
 	printf("Iteration: %d\n", iteration );
@@ -295,12 +290,6 @@ int main(int argc, char *argv[]) {
 	/* 2. Start global timer */
 	double ttotal = cp_Wtime();
 
-/*
- *
- * START HERE: DO NOT CHANGE THE CODE ABOVE THIS POINT
- *
- */
-
 	/* 3. Initialize surfaces */
 	surface = (float *)malloc( sizeof(float) * (size_t)rows * (size_t)columns );
 	surfaceCopy = (float *)malloc( sizeof(float) * (size_t)rows * (size_t)columns );
@@ -348,8 +337,7 @@ int main(int argc, char *argv[]) {
 			}
 
 			/* 4.2.2. Copy values of the surface in ancillary structure (Skip borders) */
-			/*#pragma omp parallel for shared(surfaceCopy, surface, rows, columns) private(i, j) num_threads(4)
-			for( i=1; i<rows-1; i++ )
+			/*for( i=1; i<rows-1; i++ )
 				for( j=1; j<columns-1; j++ )
 					accessMat( surfaceCopy, i, j ) = accessMat( surface, i, j );*/
 
@@ -358,7 +346,6 @@ int main(int argc, char *argv[]) {
 			surfaceCopy = ez;
 
 			/* 4.2.3. Update surface values (skip borders) */
-			//#pragma omp parallel for shared(surfaceCopy, surface, rows, columns) private(i, j) num_threads(num_threads)
 			for( i=1; i<rows-1; i++ )
 				for( j=1; j<columns-1; j++ )
 					accessMat( surface, i, j ) = ( 
@@ -380,7 +367,6 @@ int main(int argc, char *argv[]) {
 		if( num_deactivated == num_focal && global_residual < THRESHOLD ) flag_stability = 1;
 
 		/* 4.3. Move teams */
-		//#pragma omp parallel for shared(teams, num_teams, surface, focal, num_focal) private(t,j) num_threads(num_threads)
 		for (t = 0; t < num_teams; t++) {
 			/* 4.3.1. Choose nearest focal point */
 			float distance = FLT_MAX;
@@ -427,7 +413,6 @@ int main(int argc, char *argv[]) {
 		}
 
 		/* 4.4. Team actions */
-		//#pragma omp parallel for shared(teams, num_teams, surface, columns, rows, focal) private(t,i,j) num_threads(num_threads)
 		for (t = 0; t < num_teams; t++) {
 			/* 4.4.1. Deactivate the target focal point when it is reached */
 			int target = teams[t].target;
@@ -462,12 +447,6 @@ int main(int argc, char *argv[]) {
 #endif // DEBUG
 	}
 	
-/*
- *
- * STOP HERE: DO NOT CHANGE THE CODE BELOW THIS POINT
- *
- */
-
 	/* 5. Stop global time */
 	ttotal = cp_Wtime() - ttotal;
 
